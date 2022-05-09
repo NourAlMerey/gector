@@ -55,7 +55,7 @@ class GecBERTModel(object):
 
         self.indexers = []
         self.models = []
-        for model_path in model_paths:
+        for model_path in ['roberta_1_gectorv2.th']:
             if is_ensemble:
                 model_name, special_tokens_fix = self._get_model_data(model_path)
             weights_name = get_weights_name(model_name, lowercase_tokens)
@@ -65,10 +65,11 @@ class GecBERTModel(object):
                                confidence=self.confidence,
                                del_confidence=self.del_conf,
                                ).to(self.device)
+
             if torch.cuda.is_available():
                 model.load_state_dict(torch.load(model_path), strict=False)
             else:
-                model.load_state_dict(torch.load(model_path,
+                model.load_state_dict(torch.load('roberta_1_gectorv2.th',
                                                  map_location=torch.device('cpu')),
                                                  strict=False)
             model.eval()
@@ -113,9 +114,11 @@ class GecBERTModel(object):
         t11 = time()
         predictions = []
         for batch, model in zip(batches, self.models):
+            # p = Seq2Labels.decode(model, batch.as_tensor_dict())
             batch = util.move_to_device(batch.as_tensor_dict(), 0 if torch.cuda.is_available() else -1)
             with torch.no_grad():
                 prediction = model.forward(**batch)
+
             predictions.append(prediction)
 
         preds, idx, error_probs = self._convert(predictions)
@@ -125,6 +128,7 @@ class GecBERTModel(object):
         return preds, idx, error_probs
 
     def get_token_action(self, token, index, prob, sugg_token):
+        sugg_token = sugg_token.strip('\r')
         """Get lost of suggested actions for token."""
         # cases when we don't need to do anything
         if prob < self.min_error_probability or sugg_token in [UNK, PAD, '$KEEP']:
@@ -252,6 +256,7 @@ class GecBERTModel(object):
 
                 sugg_token = self.vocab.get_token_from_index(idxs[i],
                                                              namespace='labels')
+                sugg_token = sugg_token.strip('\r')
                 action = self.get_token_action(token, i, probabilities[i],
                                                sugg_token)
                 if not action:
@@ -284,6 +289,7 @@ class GecBERTModel(object):
 
             pred_batch = self.postprocess_batch(orig_batch, probabilities,
                                                 idxs, error_probs)
+
             if self.log:
                 print(f"Iteration {n_iter + 1}. Predicted {round(100*len(pred_ids)/batch_size, 1)}% of sentences.")
 

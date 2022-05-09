@@ -91,6 +91,7 @@ def main(args):
     if not os.path.exists(args.model_dir):
         os.mkdir(args.model_dir)
 
+
     weights_name = get_weights_name(args.transformer_model, args.lowercase_tokens)
     # read datasets
     reader = get_data_reader(weights_name, args.max_len, skip_correct=bool(args.skip_correct),
@@ -194,11 +195,14 @@ if __name__ == '__main__':
     # read parameters
     parser = argparse.ArgumentParser()
     parser.add_argument('--train_set',
-                        help='Path to the train data', required=True)
+                        help='Path to the train data',
+                        default='output.txt')
     parser.add_argument('--dev_set',
-                        help='Path to the dev data', required=True)
+                        help='Path to the dev data',
+                        default='outputdev.txt')
     parser.add_argument('--model_dir',
-                        help='Path to the model dir', required=True)
+                        help='Path to the model dir',
+                        default='C:\\Users\\nalme\\Desktop\\roberta_1_gectorv2.th')
     parser.add_argument('--vocab_path',
                         help='Path to the model vocabulary directory.'
                              'If not set then build vocab from data',

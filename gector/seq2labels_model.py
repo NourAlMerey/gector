@@ -171,7 +171,7 @@ class Seq2Labels(Model):
         adds a ``"tags"`` key to the dictionary with the result.
         """
         for label_namespace in self.label_namespaces:
-            all_predictions = output_dict[f'class_probabilities_{label_namespace}']
+            all_predictions = output_dict['tokens'][f'class_probabilities_{label_namespace}']
             all_predictions = all_predictions.cpu().data.numpy()
             if all_predictions.ndim == 3:
                 predictions_list = [all_predictions[i] for i in range(all_predictions.shape[0])]

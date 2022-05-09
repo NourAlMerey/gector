@@ -47,7 +47,7 @@ def main(args):
                          weigths=args.weights)
 
     cnt_corrections = predict_for_file(args.input_file, args.output_file, model,
-                                       batch_size=args.batch_size, 
+                                       batch_size=args.batch_size,
                                        to_normalize=args.normalize)
     # evaluate with m2 or ERRANT
     print(f"Produced overall corrections: {cnt_corrections}")
@@ -57,18 +57,18 @@ if __name__ == '__main__':
     # read parameters
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_path',
-                        help='Path to the model file.', nargs='+',
-                        required=True)
+                        help='Path to the model file.',
+                        default='roberta_1_gectorv2.th')
     parser.add_argument('--vocab_path',
                         help='Path to the model file.',
                         default='data/output_vocabulary'  # to use pretrained models
                         )
     parser.add_argument('--input_file',
                         help='Path to the evalset file',
-                        required=True)
+                        default='sourcefiledev.txt')
     parser.add_argument('--output_file',
                         help='Path to the output file',
-                        required=True)
+                        default='result.txt')
     parser.add_argument('--max_len',
                         type=int,
                         help='The max sentence length'
@@ -89,7 +89,8 @@ if __name__ == '__main__':
                         default=0)
     parser.add_argument('--transformer_model',
                         choices=['bert', 'gpt2', 'transformerxl', 'xlnet', 'distilbert', 'roberta', 'albert'
-                                 'bert-large', 'roberta-large', 'xlnet-large'],
+                                                                                                    'bert-large',
+                                 'roberta-large', 'xlnet-large'],
                         help='Name of the transformer model.',
                         default='roberta')
     parser.add_argument('--iteration_count',
