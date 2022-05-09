@@ -25,7 +25,7 @@ def predict_for_file(input_file, output_file, model, batch_size=32, to_normalize
     if to_normalize:
         result_lines = [normalize(line) for line in result_lines]
 
-    with open(output_file, 'w') as f:
+    with open(output_file, 'w', encoding="utf-8") as f:
         f.write("\n".join(result_lines) + '\n')
     return cnt_corrections
 
@@ -58,14 +58,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_path',
                         help='Path to the model file.',
-                        default='roberta_1_gectorv2.th')
+                        default=r'C:\Users\nalme\Downloads\roberta_1_gectorv2.th')
     parser.add_argument('--vocab_path',
                         help='Path to the model file.',
                         default='data/output_vocabulary'  # to use pretrained models
                         )
     parser.add_argument('--input_file',
                         help='Path to the evalset file',
-                        default='sourcefiledev.txt')
+                        default='speedTest.txt')
     parser.add_argument('--output_file',
                         help='Path to the output file',
                         default='result.txt')

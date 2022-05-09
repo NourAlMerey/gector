@@ -55,7 +55,7 @@ class GecBERTModel(object):
 
         self.indexers = []
         self.models = []
-        for model_path in ['roberta_1_gectorv2.th']:
+        for model_path in [model_paths]:
             if is_ensemble:
                 model_name, special_tokens_fix = self._get_model_data(model_path)
             weights_name = get_weights_name(model_name, lowercase_tokens)
@@ -69,7 +69,7 @@ class GecBERTModel(object):
             if torch.cuda.is_available():
                 model.load_state_dict(torch.load(model_path), strict=False)
             else:
-                model.load_state_dict(torch.load('roberta_1_gectorv2.th',
+                model.load_state_dict(torch.load(model_path,
                                                  map_location=torch.device('cpu')),
                                                  strict=False)
             model.eval()
